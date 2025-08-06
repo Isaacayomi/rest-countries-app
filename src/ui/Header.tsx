@@ -6,6 +6,9 @@ const H1 = styled.h1`
   font-style: normal;
   font-weight: 800;
   line-height: 1.25rem;
+  @media (min-width: 1024px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const StyledNav = styled.nav`
@@ -16,6 +19,17 @@ const StyledNav = styled.nav`
   padding-inline: 1rem;
   padding-block: 1.88rem;
   background-color: white;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  max-width: 23.4375rem;
+  width: 100%;
+  margin-inline: auto;
+
+  @media (min-width: 1024px) {
+    max-width: 90rem;
+    width: 100%;
+    margin-bottom: 3rem;
+  }
 `;
 
 const Span = styled.span`
@@ -32,6 +46,10 @@ const Mode = styled.p`
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+
+  @media (min-width: 1024px) {
+    font-size: 1rem;
+  }
 `;
 
 function Header() {
