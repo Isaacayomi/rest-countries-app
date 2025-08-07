@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import SEARCH_ICON from "../assets/images/search.png";
-import { useSearchParams } from "react-router";
+import SEARCH_ICON from "../../assets/images/search.png";
 import { useDispatch, useSelector } from "react-redux";
+import { setSearch } from "./searchSlice";
 
 const Label = styled.label.attrs((props: any) => ({
   className: props.className,
@@ -25,9 +25,6 @@ const Label = styled.label.attrs((props: any) => ({
 const Input = styled.input.attrs((props: any) => ({
   className: props.className,
 }))`
-  background-color: none;
-  /* background-color: red; */
-  /* color: #c4c4c4; */
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
@@ -46,7 +43,11 @@ const SearchIcon = styled.img`
 
 function Search() {
   const { light } = useSelector((state: any) => state.theme);
-  // const dispatch = useDispatch()
+  const { search } = useSelector((state: any) => state.search);
+  const dispatch = useDispatch();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSearch(e.target.value));
+  };
   return (
     <>
       <Label
@@ -54,6 +55,8 @@ function Search() {
       >
         <SearchIcon src={SEARCH_ICON} alt="search icon" />
         <Input
+          onChange={handleChange}
+          value={search}
           type="text"
           name="country"
           id="country"

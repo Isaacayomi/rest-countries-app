@@ -2,7 +2,7 @@ import styled, { ThemeProvider } from "styled-components";
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router";
 import Header from "./Header";
 import GlobalStyles from "../styles/GlobalStyles";
-import Search from "../components/Search";
+import Search from "../features/search/Search";
 import Filter from "../components/Filter";
 import { useSelector } from "react-redux";
 

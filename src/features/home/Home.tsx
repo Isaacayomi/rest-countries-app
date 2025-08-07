@@ -20,6 +20,7 @@ const Home = () => {
       try {
         setLoading(true);
         const res = await fetch("./data.json");
+        // console.log(res/'algeria');
         const data = await res.json();
         setCountry(data);
         setLoading(false);
@@ -34,7 +35,6 @@ const Home = () => {
   return (
     <StyledHome>
       {loading && <Loader />}
-      {/* {loading && <p>Loading...</p>} */}
       {country.map(({ name, population, region, capital, flag }: any) => (
         <CountryCard
           key={name}
