@@ -1,6 +1,8 @@
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import LIGHT_MOON from "../assets/images/light-moon.png";
-
+import DARK_MOON from "../assets/images/dark-moon.png";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../features/toggleTheme/themeSlice";
 const H1 = styled.h1`
   font-size: 0.875rem;
   font-style: normal;
@@ -11,16 +13,18 @@ const H1 = styled.h1`
   }
 `;
 
-const StyledNav = styled.nav`
-  color: #111517;
+const StyledNav = styled.nav.attrs((props: any) => ({
+  className: props.className,
+}))`
+  /* color: ; */
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-inline: 1rem;
   padding-block: 1.88rem;
-  background-color: white;
+  /* background-color: white; */
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  /* box-shadow: ; */
   max-width: 23.4375rem;
   width: 100%;
   margin-inline: auto;
@@ -53,14 +57,20 @@ const Mode = styled.p`
 `;
 
 function Header() {
+  const { light } = useSelector((state: any) => state.theme);
+  const dispatch = useDispatch();
   return (
-    <StyledNav>
-      <H1>Where in the world?</H1>
-      <Span>
-        <Mode>Dark Mode</Mode>
-        <img src={LIGHT_MOON} alt="light-moon" />
-      </Span>
-    </StyledNav>
+    <>
+      <StyledNav
+        className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
+      >
+        <H1>Where in the world?</H1>
+        <Span onClick={() => dispatch(toggleTheme())}>
+          <Mode>{light ? "Light Mode" : "Dark Mode"}</Mode>
+          <img src={light ? DARK_MOON : LIGHT_MOON} alt="light-moon" />
+        </Span>
+      </StyledNav>
+    </>
   );
 }
 export default Header;

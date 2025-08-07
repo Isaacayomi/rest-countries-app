@@ -6,12 +6,10 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
     box-sizing: border-box;
     font-family: "Nunito Sans", sans-serif;
+    transition: .1s linear;
 
   }
 
-  body {
-    background-color: ${({ theme }) => theme.background};
-    color: ${({ theme }) => theme.text};
-  }
+  
 `;
 export default GlobalStyles;

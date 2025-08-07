@@ -1,6 +1,7 @@
 import styled from "styled-components";
 // import FLAG from "../../assets/images/flag.png";
 import { Link } from "react-router";
+import { useSelector } from "react-redux";
 
 type FlagProps = {
   countryName: string;
@@ -10,11 +11,13 @@ type FlagProps = {
   flag: string;
 };
 
-const StyledContainer = styled.div`
+const StyledContainer = styled.div.attrs((props: any) => ({
+  className: props.className,
+}))`
   max-width: 16.6875rem;
   margin-inline: auto;
   border-radius: 0.3125rem;
-  background: #fff;
+  /* background: #fff; */
   box-shadow: 0 0 7px 2px rgba(0, 0, 0, 0.03);
   padding-bottom: 2.88rem;
   text-decoration: none;
@@ -30,7 +33,7 @@ const Flag = styled.img`
 const CountryName = styled.h3`
   padding-bottom: 1rem;
   padding-left: 1.5rem;
-  color: #111517;
+  /* color: #111517; */
   font-size: 1.125rem;
   font-style: normal;
   font-weight: 800;
@@ -57,7 +60,7 @@ const FlagDetails = styled.span`
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: #111517;
+  /* color: #111517; */
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 600;
@@ -71,9 +74,12 @@ function CountryCard({
   capital,
   flag,
 }: FlagProps) {
+  const { light } = useSelector((state: any) => state.theme);
   return (
     <StyledLink to="country-details">
-      <StyledContainer>
+      <StyledContainer
+        className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "shadow:lg bg-white text-[#111517]"}`}
+      >
         <Flag src={flag} alt=" flag" />
         <CountryName>{countryName}</CountryName>
         <Population>

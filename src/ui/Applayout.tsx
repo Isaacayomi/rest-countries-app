@@ -1,11 +1,10 @@
 import styled, { ThemeProvider } from "styled-components";
-import { Outlet } from "react-router";
+import { Navigate, Outlet, useLocation, useNavigate } from "react-router";
 import Header from "./Header";
 import GlobalStyles from "../styles/GlobalStyles";
 import Search from "../components/Search";
 import Filter from "../components/Filter";
 import { useSelector } from "react-redux";
-import { darkTheme, lightTheme } from "../features/toggleTheme/themeSlice";
 
 const StyledApp = styled.div`
   display: flex;
@@ -29,24 +28,31 @@ const ActionsBars = styled.div`
   }
 `;
 const Applayout = () => {
-  const { theme } = useSelector((state: any) => state.theme);
-
-  const currentTheme = theme === "light" ? lightTheme : darkTheme;
+  const { light } = useSelector((state: any) => state.theme);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <>
       {/* Global styles */}
-      <ThemeProvider theme={currentTheme}>
-        <GlobalStyles />
+      <GlobalStyles />
+      <div
+        className={`${light === true ? "dark: dark:bg-[#202C36] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
+      >
         <StyledApp>
           <Header />
-          <ActionsBars>
-            <Search />
-            <Filter />
-          </ActionsBars>
+          {location.pathname === "/" ? (
+            <ActionsBars>
+              <Search />
+              <Filter />
+            </ActionsBars>
+          ) : (
+            <button onClick={() => navigate(-1)}>BACK</button>
+          )}
+
           <Outlet />
         </StyledApp>
-      </ThemeProvider>
+      </div>
     </>
   );
 };
