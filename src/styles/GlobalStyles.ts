@@ -8,5 +8,10 @@ const GlobalStyles = createGlobalStyle`
     font-family: "Nunito Sans", sans-serif;
 
   }
+
+  body {
+    background-color: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.text};
+  }
 `;
 export default GlobalStyles;

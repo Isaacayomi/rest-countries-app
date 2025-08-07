@@ -21,7 +21,6 @@ const Home = () => {
         setLoading(true);
         const res = await fetch("./data.json");
         const data = await res.json();
-        console.log(data);
         setCountry(data);
         setLoading(false);
       } catch (error) {
