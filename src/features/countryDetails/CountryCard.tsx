@@ -1,12 +1,13 @@
 import styled from "styled-components";
-import FLAG from "../../assets/images/flag.png";
+// import FLAG from "../../assets/images/flag.png";
 import { Link } from "react-router";
 
 type FlagProps = {
-  countryName?: string;
-  population?: number;
-  region?: string;
-  capital?: string;
+  countryName: string;
+  population: number;
+  region: string;
+  capital: string;
+  flag: string;
 };
 
 const StyledContainer = styled.div`
@@ -60,23 +61,29 @@ const StyledLink = styled(Link)`
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 600;
-  line-height: 1rem; /* 114.286% */
+  line-height: 1rem;
 `;
 
-function CountryCard({ countryName, population, region, capital }: FlagProps) {
+function CountryCard({
+  countryName,
+  population,
+  region,
+  capital,
+  flag,
+}: FlagProps) {
   return (
     <StyledLink to="country-details">
       <StyledContainer>
-        <Flag src={FLAG} alt=" flag" />
-        <CountryName>Germany</CountryName>
+        <Flag src={flag} alt=" flag" />
+        <CountryName>{countryName}</CountryName>
         <Population>
-          Population: <FlagDetails>81,770,900</FlagDetails>
+          Population: <FlagDetails>{population}</FlagDetails>
         </Population>
         <Region>
-          Region: <FlagDetails>Europe</FlagDetails>
+          Region: <FlagDetails>{region}</FlagDetails>
         </Region>
         <Capital>
-          Capital: <FlagDetails>Berlin</FlagDetails>
+          Capital: <FlagDetails>{capital}</FlagDetails>
         </Capital>
       </StyledContainer>
     </StyledLink>
