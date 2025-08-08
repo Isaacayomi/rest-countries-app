@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import CountryCard from "../countryDetails/CountryCard";
 import Loader from "../../ui/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCountries } from "../countryDetails/countryDetailsSlice";
+import { BASE_URL } from "../../constant";
 
 const StyledHome = styled.div`
   @media (min-width: 1024px) {
@@ -13,39 +16,60 @@ const StyledHome = styled.div`
 
 const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [country, setCountry] = useState<any>([]);
+  const { countries } = useSelector((state: any) => state.countries);
+  const { searchedCountry, search } = useSelector((state: any) => state.search);
+  const dispatch = useDispatch();
 
-  useEffect(function () {
-    async function fetchCountries() {
+  useEffect(() => {
+    async function getCountries() {
       try {
         setLoading(true);
-        const res = await fetch("./data.json");
-        // console.log(res/'algeria');
+        const res = await fetch(BASE_URL);
         const data = await res.json();
-        setCountry(data);
-        setLoading(false);
+        dispatch(fetchCountries(data));
       } catch (error) {
-        setLoading(false);
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     }
-    fetchCountries();
-  }, []);
+    getCountries();
+  }, [dispatch]);
 
   return (
-    <StyledHome>
+    <>
       {loading && <Loader />}
-      {country.map(({ name, population, region, capital, flag }: any) => (
-        <CountryCard
-          key={name}
-          flag={flag}
-          countryName={name}
-          population={population}
-          region={region}
-          capital={capital}
-        />
-      ))}
-    </StyledHome>
+      <StyledHome>
+        {search?.length > 0 &&
+          searchedCountry.map(
+            ({ name, population, region, capital, flags, id }: any) => (
+              <CountryCard
+                key={id || name.common}
+                flag={flags?.png}
+                countryName={name.common}
+                population={population}
+                region={region}
+                capital={capital?.[0] || "N/A"}
+              />
+            ),
+          )}
+
+        {search?.length === 0 &&
+          countries.map(
+            ({ name, population, region, capital, flags, id }: any) => (
+              <CountryCard
+                key={id || name.common}
+                flag={flags?.png}
+                countryName={name.common}
+                population={population}
+                region={region}
+                capital={capital?.[0] || "N/A"}
+              />
+            ),
+          )}
+      </StyledHome>
+    </>
   );
 };
+
 export default Home;

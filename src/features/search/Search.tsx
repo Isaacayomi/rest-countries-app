@@ -1,7 +1,15 @@
 import styled from "styled-components";
 import SEARCH_ICON from "../../assets/images/search.png";
 import { useDispatch, useSelector } from "react-redux";
-import { setSearch } from "./searchSlice";
+import {
+  filterSearchedCountry,
+  setSearch,
+  // filterSearchedCountry,
+} from "./searchSlice";
+import { useEffect, useState } from "react";
+import { BASE_URL, SEARCH_URL } from "../../constant";
+import { fetchCountries } from "../countryDetails/countryDetailsSlice";
+import Loader from "../../ui/Loader";
 
 const Label = styled.label.attrs((props: any) => ({
   className: props.className,
@@ -42,12 +50,49 @@ const SearchIcon = styled.img`
 `;
 
 function Search() {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+
   const { light } = useSelector((state: any) => state.theme);
-  const { search } = useSelector((state: any) => state.search);
+  const { search, searchedCountry } = useSelector((state: any) => state.search);
+  const allCountries = useSelector((state: any) => state.countries.countries);
+
   const dispatch = useDispatch();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearch(e.target.value));
+    dispatch(filterSearchedCountry(allCountries));
   };
+
+  useEffect(() => {
+    async function getSearchedCountry() {
+      if (!search.trim()) {
+        setLoading(false);
+        setError(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError(false);
+
+        const res = await fetch(`${SEARCH_URL}/name/${search}`);
+        if (!res.ok) {
+          throw new Error("Country not found");
+        }
+
+        const data = await res.json();
+        dispatch(fetchCountries(data));
+      } catch (err) {
+        console.error(err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getSearchedCountry();
+  }, [search, dispatch]);
+
   return (
     <>
       <Label
@@ -64,6 +109,10 @@ function Search() {
           className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white" : "bg-white text-[#111517]"}`}
         />
       </Label>
+      {loading && <Loader />}
+      {error && (
+        <p className="border border-red-500 bg-purple-600">Country not found</p>
+      )}
     </>
   );
 }

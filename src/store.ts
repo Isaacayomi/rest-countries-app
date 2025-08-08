@@ -6,7 +6,7 @@ import searchReducer from "./features/search/searchSlice";
 const store = configureStore({
   reducer: {
     home: homeReducer,
-    countryDetails: countryDetailsReducer,
+    countries: countryDetailsReducer,
     theme: themeReducer,
     search: searchReducer,
   },

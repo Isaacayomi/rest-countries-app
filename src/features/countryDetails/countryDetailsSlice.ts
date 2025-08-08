@@ -1,13 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {};
+interface CountryState {
+  countries: any;
+}
+
+const initialState: CountryState = {
+  countries: [],
+};
 
 export const countryDetailsSlice = createSlice({
-  name: "countryDetails",
+  name: "countries",
   initialState,
-  reducers: {},
+  reducers: {
+    fetchCountries(state, action) {
+      state.countries = action.payload;
+    },
+  },
 });
 
-// export const {} = countryDetailsSlice.actions;
+export const { fetchCountries } = countryDetailsSlice.actions;
 
 export default countryDetailsSlice.reducer;
