@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { BASE_URL, SEARCH_URL } from "../../constant";
 import { fetchCountries } from "../countryDetails/countryDetailsSlice";
 import Loader from "../../ui/Loader";
+import ErrorComponent from "../../ui/ErrorComponent";
 
 const Label = styled.label.attrs((props: any) => ({
   className: props.className,
@@ -83,7 +84,6 @@ function Search() {
         const data = await res.json();
         dispatch(fetchCountries(data));
       } catch (err) {
-        console.error(err);
         setError(true);
       } finally {
         setLoading(false);
@@ -110,9 +110,7 @@ function Search() {
         />
       </Label>
       {loading && <Loader />}
-      {error && (
-        <p className="border border-red-500 bg-purple-600">Country not found</p>
-      )}
+      {error && <ErrorComponent />}
     </>
   );
 }

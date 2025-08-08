@@ -37,7 +37,7 @@ const Applayout = () => {
       {/* Global styles */}
       <GlobalStyles />
       <div
-        className={`${light === true ? "dark: dark:bg-[#202C36] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
+        className={`min-h-screen ${light === true ? "dark: dark:bg-[#202C36] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
       >
         <StyledApp>
           <Header />

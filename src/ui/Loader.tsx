@@ -10,12 +10,17 @@ const StyledLoader = styled.div`
 const Spinner = styled.div`
   width: 48px;
   height: 48px;
-  border: 5px solid #111517;
+  border: 5px solid #111517; /* light mode border */
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
+
+  @media (prefers-color-scheme: dark) {
+    border-color: #ffffff; /* dark mode border */
+    border-bottom-color: transparent;
+  }
 
   @keyframes rotation {
     0% {
@@ -30,8 +35,9 @@ const Spinner = styled.div`
 function Loader() {
   return (
     <StyledLoader>
-      <Spinner></Spinner>
+      <Spinner />
     </StyledLoader>
   );
 }
+
 export default Loader;
