@@ -18,6 +18,9 @@ const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { countries } = useSelector((state: any) => state.countries);
   const { searchedCountry, search } = useSelector((state: any) => state.search);
+  const { filter, filteredCountries } = useSelector(
+    (state: any) => state.filter,
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -39,7 +42,51 @@ const Home = () => {
   return (
     <>
       {loading && <Loader />}
+
       <StyledHome>
+        {loading && <Loader />}
+
+        {search?.length > 0
+          ? searchedCountry.map(
+              ({ name, population, region, capital, flags, id }: any) => (
+                <CountryCard
+                  key={id || name.common}
+                  flag={flags?.png}
+                  countryName={name.common}
+                  population={population}
+                  region={region}
+                  capital={capital?.[0] || "N/A"}
+                />
+              ),
+            )
+          : filter && filteredCountries.length > 0
+            ? filteredCountries.map(
+                ({ name, population, region, capital, flags, id }: any) => (
+                  <CountryCard
+                    key={id || name.common}
+                    flag={flags?.png}
+                    countryName={name.common}
+                    population={population}
+                    region={region}
+                    capital={capital?.[0] || "N/A"}
+                  />
+                ),
+              )
+            : countries.map(
+                ({ name, population, region, capital, flags, id }: any) => (
+                  <CountryCard
+                    key={id || name.common}
+                    flag={flags?.png}
+                    countryName={name.common}
+                    population={population}
+                    region={region}
+                    capital={capital?.[0] || "N/A"}
+                  />
+                ),
+              )}
+      </StyledHome>
+
+      {/* <StyledHome>
         {search?.length > 0 &&
           searchedCountry.map(
             ({ name, population, region, capital, flags, id }: any) => (
@@ -67,7 +114,21 @@ const Home = () => {
               />
             ),
           )}
-      </StyledHome>
+
+        {filteredCountries.length > 0 &&
+          filteredCountries.map(
+            ({ name, population, region, capital, flags, id }: any) => (
+              <CountryCard
+                key={id || name.common}
+                flag={flags?.png}
+                countryName={name.common}
+                population={population}
+                region={region}
+                capital={capital?.[0] || "N/A"}
+              />
+            ),
+          )}
+      </StyledHome> */}
     </>
   );
 };

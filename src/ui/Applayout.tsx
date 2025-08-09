@@ -3,7 +3,7 @@ import { Navigate, Outlet, useLocation, useNavigate } from "react-router";
 import Header from "./Header";
 import GlobalStyles from "../styles/GlobalStyles";
 import Search from "../features/search/Search";
-import Filter from "../components/Filter";
+import Filter from "../features/Filter/Filter";
 import { useSelector } from "react-redux";
 
 const StyledApp = styled.div`
