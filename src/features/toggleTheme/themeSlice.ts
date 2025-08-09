@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 // Slice
-interface ThemeState {
+export interface ThemeState {
   light: boolean;
 }
 
