@@ -40,7 +40,7 @@ function Loader() {
     <StyledLoader>
       <Spinner
         key={light ? "light" : "dark"}
-        $borderColor={light ? "#111517" : "#ffffff"}
+        $borderColor={light ? "white" : "#202C36"}
       />
     </StyledLoader>
   );

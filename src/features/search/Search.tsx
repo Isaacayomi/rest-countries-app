@@ -7,7 +7,7 @@ import {
   // filterSearchedCountry,
 } from "./searchSlice";
 import { useEffect, useState } from "react";
-import { BASE_URL, SEARCH_URL } from "../../constant";
+import { BASE_URL } from "../../constant";
 import { fetchCountries } from "../countryDetails/countryDetailsSlice";
 import Loader from "../../ui/Loader";
 import ErrorComponent from "../../ui/ErrorComponent";
@@ -71,18 +71,17 @@ function Search() {
         setError(false);
         return;
       }
-
       try {
         setLoading(true);
         setError(false);
-
-        const res = await fetch(`${SEARCH_URL}/name/${search}`);
+        const res = await fetch(`${BASE_URL}/name/${search}`);
         if (!res.ok) {
           throw new Error("Country not found");
         }
 
         const data = await res.json();
         dispatch(fetchCountries(data));
+        setError(false);
       } catch (err) {
         setError(true);
       } finally {

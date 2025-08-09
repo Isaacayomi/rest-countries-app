@@ -4,7 +4,7 @@ import CountryCard from "../countryDetails/CountryCard";
 import Loader from "../../ui/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCountries } from "../countryDetails/countryDetailsSlice";
-import { BASE_URL } from "../../constant";
+import { ALL_COUNTRIES_URL } from "../../constant";
 
 const StyledHome = styled.div`
   @media (min-width: 1024px) {
@@ -24,7 +24,7 @@ const Home = () => {
     async function getCountries() {
       try {
         setLoading(true);
-        const res = await fetch(BASE_URL);
+        const res = await fetch(ALL_COUNTRIES_URL);
         const data = await res.json();
         dispatch(fetchCountries(data));
       } catch (error) {
