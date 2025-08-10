@@ -48,7 +48,16 @@ const Home = () => {
 
         {search?.length > 0
           ? searchedCountry.map(
-              ({ name, population, region, capital, flags, id }: any) => (
+              ({
+                name,
+                population,
+                region,
+                capital,
+                flags,
+                id,
+                tld,
+                subRegion,
+              }: any) => (
                 <CountryCard
                   key={id || name.common}
                   flag={flags?.png}
@@ -85,50 +94,6 @@ const Home = () => {
                 ),
               )}
       </StyledHome>
-
-      {/* <StyledHome>
-        {search?.length > 0 &&
-          searchedCountry.map(
-            ({ name, population, region, capital, flags, id }: any) => (
-              <CountryCard
-                key={id || name.common}
-                flag={flags?.png}
-                countryName={name.common}
-                population={population}
-                region={region}
-                capital={capital?.[0] || "N/A"}
-              />
-            ),
-          )}
-
-        {search?.length === 0 &&
-          countries.map(
-            ({ name, population, region, capital, flags, id }: any) => (
-              <CountryCard
-                key={id || name.common}
-                flag={flags?.png}
-                countryName={name.common}
-                population={population}
-                region={region}
-                capital={capital?.[0] || "N/A"}
-              />
-            ),
-          )}
-
-        {filteredCountries.length > 0 &&
-          filteredCountries.map(
-            ({ name, population, region, capital, flags, id }: any) => (
-              <CountryCard
-                key={id || name.common}
-                flag={flags?.png}
-                countryName={name.common}
-                population={population}
-                region={region}
-                capital={capital?.[0] || "N/A"}
-              />
-            ),
-          )}
-      </StyledHome> */}
     </>
   );
 };

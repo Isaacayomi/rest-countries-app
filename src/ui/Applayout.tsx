@@ -4,6 +4,8 @@ import Header from "./Header";
 import GlobalStyles from "../styles/GlobalStyles";
 import Search from "../features/search/Search";
 import Filter from "../features/Filter/Filter";
+import LIGHT_ARROW from "../assets/images/light-arrow-back.png";
+import DARK_ARROW from "../assets/images/dark-arrow-black.png";
 import { useSelector } from "react-redux";
 
 const StyledApp = styled.div`
@@ -47,7 +49,18 @@ const Applayout = () => {
               <Filter />
             </ActionsBars>
           ) : (
-            <button onClick={() => navigate(-1)}>BACK</button>
+            <button
+              className={`absolute top-20 m-4 ${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
+              onClick={() => navigate(-1)}
+            >
+              <span className="flex flex-row-reverse items-center gap-[0.5rem] px-[1.5rem] py-[0.44rem]">
+                <p>Back</p>
+                <img
+                  src={light === true ? DARK_ARROW : LIGHT_ARROW}
+                  alt="back-arrow"
+                />
+              </span>
+            </button>
           )}
 
           <Outlet />

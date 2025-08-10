@@ -1,7 +1,10 @@
 import styled from "styled-components";
 // import FLAG from "../../assets/images/flag.png";
-import { Link } from "react-router";
-import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import CountryDetails from "./CountryDetails";
+import { countryDetails } from "./countryDetailsSlice";
+import type { ReactElement } from "react";
 
 type FlagProps = {
   countryName: string;
@@ -9,6 +12,9 @@ type FlagProps = {
   region: string;
   capital: string;
   flag: string;
+  subRegion?: string;
+  tld?: string;
+  languages?: any[];
 };
 
 const StyledContainer = styled.div.attrs((props: any) => ({
@@ -60,7 +66,6 @@ const FlagDetails = styled.span`
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  /* color: #111517; */
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 600;
@@ -73,14 +78,36 @@ function CountryCard({
   region,
   capital,
   flag,
+  tld,
+  subRegion,
 }: FlagProps) {
   const { light } = useSelector((state: any) => state.theme);
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const onDetailsPage = location.pathname === "country-details";
   return (
-    <StyledLink to="country-details">
+    <StyledLink
+      onClick={(e: React.MouseEvent<HTMLLinkElement>) =>
+        onDetailsPage
+          ? e.preventDefault()
+          : dispatch(
+              countryDetails({
+                countryName,
+                population,
+                region,
+                capital,
+                flag,
+                tld: tld ?? "",
+                subRegion: subRegion ?? "",
+              }),
+            )
+      }
+      to={onDetailsPage ? "#" : "/country-details"}
+    >
       <StyledContainer
-        className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "shadow:lg bg-white text-[#111517]"}`}
+        className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-2xl" : "shadow:lg bg-white text-[#111517]"}`}
       >
-        <Flag src={flag} alt=" flag" />
+        <Flag src={flag} alt={`${countryName} flag`} />
         <CountryName>{countryName}</CountryName>
         <Population>
           Population: <FlagDetails>{population}</FlagDetails>
