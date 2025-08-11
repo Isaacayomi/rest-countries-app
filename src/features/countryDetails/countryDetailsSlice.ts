@@ -13,6 +13,7 @@ export interface Country {
 export interface CountryState {
   countries: any;
   countryName: string;
+  countryDetailsName?: string;
   countryDetailsPopulation?: number;
   countryDetailsRegion?: string;
   countryDetailsCapital?: string;
@@ -26,6 +27,7 @@ export interface CountryState {
 const initialState: CountryState = {
   countries: [],
   countryName: "",
+  countryDetailsName: "",
   countryDetailsPopulation: 0,
   countryDetailsRegion: "",
   countryDetailsCapital: "",
@@ -46,6 +48,7 @@ export const countryDetailsSlice = createSlice({
     countryDetails(state, action) {
       const {
         countryName,
+        nativeNameObj,
         population,
         region,
         capital,
@@ -56,7 +59,12 @@ export const countryDetailsSlice = createSlice({
         languages,
       } = action.payload;
 
+      const nativeName = nativeNameObj
+        ? (Object.values(nativeNameObj)[0] as any).common || countryName
+        : countryName;
+
       state.countryName = countryName;
+      state.countryDetailsName = nativeName;
       state.countryDetailsPopulation = population;
       state.countryDetailsRegion = region;
       state.countryDetailsCapital = capital;

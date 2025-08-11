@@ -12,10 +12,11 @@ type FlagProps = {
   region: string;
   capital: string;
   flag: string;
+  nativeNameObj?: Record<string, { official: string; common: string }>;
   subRegion?: string;
-  tld?: string;
-  currencies?: string;
-  languages?: string;
+  tld?: string[];
+  currencies?: any;
+  languages?: any;
 };
 
 const StyledContainer = styled.div.attrs((props: any) => ({
@@ -76,6 +77,7 @@ const StyledLink = styled(Link)`
 function CountryCard({
   countryName,
   population,
+  nativeNameObj,
   region,
   capital,
   flag,
@@ -96,14 +98,15 @@ function CountryCard({
           : dispatch(
               countryDetails({
                 countryName,
+                nativeNameObj,
                 population,
                 region,
                 capital,
                 flag,
-                tld: tld ?? "",
-                subregion: subRegion ?? "",
-                currencies: currencies ?? "",
-                languages: languages ?? "",
+                tld,
+                subregion: subRegion,
+                currencies,
+                languages,
               }),
             )
       }
