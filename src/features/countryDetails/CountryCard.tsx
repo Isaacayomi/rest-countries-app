@@ -1,5 +1,4 @@
 import styled from "styled-components";
-// import FLAG from "../../assets/images/flag.png";
 import { Link, useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import CountryDetails from "./CountryDetails";
@@ -22,7 +21,9 @@ type FlagProps = {
 const StyledContainer = styled.div.attrs((props: any) => ({
   className: props.className,
 }))`
-  max-width: 16.6875rem;
+  max-width: 23.4375rem;
+  width: 100%;
+  /* max-width: 16.6875rem; */
   margin-inline: auto;
   border-radius: 0.3125rem;
   /* background: #fff; */
@@ -34,7 +35,6 @@ const StyledContainer = styled.div.attrs((props: any) => ({
 
 const Flag = styled.img`
   width: 100%;
-  height: 10rem;
   padding-bottom: 1.5rem;
 `;
 

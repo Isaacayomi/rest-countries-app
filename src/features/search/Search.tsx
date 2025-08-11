@@ -15,7 +15,7 @@ import ErrorComponent from "../../ui/ErrorComponent";
 const Label = styled.label.attrs((props: any) => ({
   className: props.className,
 }))`
-  max-width: 21.4375rem;
+  max-width: 23.4375rem;
   width: 100%;
   margin-inline: auto;
   border-radius: 0.3125rem;

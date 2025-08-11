@@ -10,7 +10,7 @@ const StyledSelect = styled.div.attrs((props: any) => ({
   border: 1px solid red;
   max-width: 12.5rem;
   width: 100%;
-  margin-inline: auto;
+  /* margin-inline: auto; */
   margin-right: 0;
   padding-block: 0.88rem;
   padding-inline: 1rem;
@@ -28,7 +28,6 @@ const SelectField = styled.select.attrs((props: any) => ({
 }))`
   outline: none;
   border: none;
-  padding-right: 3.88rem;
 
   @media (min-width: 1024px) {
     font-size: 0.875rem;
@@ -80,54 +79,56 @@ function Filter() {
   }, [filter, dispatch]);
 
   return (
-    <StyledSelect
-      className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
-    >
-      <SelectField
-        onChange={handleChange}
-        value={filter}
-        className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white" : "bg-white text-[#111517]"}`}
+    <div className="ml-[1rem] border-red-500">
+      <StyledSelect
+        className={` ${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
       >
-        <Option
-          value=""
-          disabled
-          hidden
-          className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
+        <SelectField
+          onChange={handleChange}
+          value={filter}
+          className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white" : "bg-white text-[#111517]"}`}
         >
-          Filter by region
-        </Option>
-        <Option
-          value="africa"
-          className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
-        >
-          Africa
-        </Option>
-        <Option
-          value="america"
-          className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
-        >
-          America
-        </Option>
-        <Option
-          value="europe"
-          className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
-        >
-          Europe
-        </Option>
-        <Option
-          value="asia"
-          className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
-        >
-          Asia
-        </Option>
-        <Option
-          value="oceania"
-          className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
-        >
-          Oceania
-        </Option>
-      </SelectField>
-    </StyledSelect>
+          <Option
+            value=""
+            disabled
+            hidden
+            className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
+          >
+            Filter by region
+          </Option>
+          <Option
+            value="africa"
+            className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
+          >
+            Africa
+          </Option>
+          <Option
+            value="america"
+            className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
+          >
+            America
+          </Option>
+          <Option
+            value="europe"
+            className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
+          >
+            Europe
+          </Option>
+          <Option
+            value="asia"
+            className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
+          >
+            Asia
+          </Option>
+          <Option
+            value="oceania"
+            className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
+          >
+            Oceania
+          </Option>
+        </SelectField>
+      </StyledSelect>
+    </div>
   );
 }
 
