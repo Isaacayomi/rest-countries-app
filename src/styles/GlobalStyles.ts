@@ -10,6 +10,12 @@ const GlobalStyles = createGlobalStyle`
 
   }
 
+  html, body, #root {
+ min-height: 100vh;
+
+}
+
+
 
 `;
 export default GlobalStyles;

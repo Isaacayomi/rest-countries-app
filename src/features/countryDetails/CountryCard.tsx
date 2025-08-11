@@ -14,7 +14,8 @@ type FlagProps = {
   flag: string;
   subRegion?: string;
   tld?: string;
-  languages?: any[];
+  currencies?: string;
+  languages?: string;
 };
 
 const StyledContainer = styled.div.attrs((props: any) => ({
@@ -80,6 +81,8 @@ function CountryCard({
   flag,
   tld,
   subRegion,
+  currencies,
+  languages,
 }: FlagProps) {
   const { light } = useSelector((state: any) => state.theme);
   const dispatch = useDispatch();
@@ -98,7 +101,9 @@ function CountryCard({
                 capital,
                 flag,
                 tld: tld ?? "",
-                subRegion: subRegion ?? "",
+                subregion: subRegion ?? "",
+                currencies: currencies ?? "",
+                languages: languages ?? "",
               }),
             )
       }

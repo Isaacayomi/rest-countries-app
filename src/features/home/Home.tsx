@@ -39,6 +39,18 @@ const Home = () => {
     getCountries();
   }, [dispatch]);
 
+  function parseCurrencies(currencies: any): string {
+    if (!currencies) return "N/A";
+    return Object.values(currencies)
+      .map((currency: any) => currency.name)
+      .join(", ");
+  }
+
+  function parseLanguages(languages: any): string {
+    if (!languages) return "N/A";
+    return Object.values(languages).join(", ");
+  }
+
   return (
     <>
       {loading && <Loader />}
@@ -56,7 +68,9 @@ const Home = () => {
                 flags,
                 id,
                 tld,
-                subRegion,
+                subregion,
+                currencies,
+                languages,
               }: any) => (
                 <CountryCard
                   key={id || name.common}
@@ -65,12 +79,27 @@ const Home = () => {
                   population={population}
                   region={region}
                   capital={capital?.[0] || "N/A"}
+                  subRegion={subregion ?? "N/A"}
+                  tld={tld ?? []}
+                  currencies={parseCurrencies(currencies)}
+                  languages={parseLanguages(languages)}
                 />
               ),
             )
           : filter && filteredCountries.length > 0
             ? filteredCountries.map(
-                ({ name, population, region, capital, flags, id }: any) => (
+                ({
+                  name,
+                  population,
+                  region,
+                  capital,
+                  flags,
+                  id,
+                  tld,
+                  subregion,
+                  currencies,
+                  languages,
+                }: any) => (
                   <CountryCard
                     key={id || name.common}
                     flag={flags?.png}
@@ -78,11 +107,26 @@ const Home = () => {
                     population={population}
                     region={region}
                     capital={capital?.[0] || "N/A"}
+                    subRegion={subregion ?? "N/A"}
+                    tld={tld ?? []}
+                    currencies={parseCurrencies(currencies)}
+                    languages={parseLanguages(languages)}
                   />
                 ),
               )
             : countries.map(
-                ({ name, population, region, capital, flags, id }: any) => (
+                ({
+                  name,
+                  population,
+                  region,
+                  capital,
+                  flags,
+                  id,
+                  tld,
+                  subregion,
+                  currencies,
+                  languages,
+                }: any) => (
                   <CountryCard
                     key={id || name.common}
                     flag={flags?.png}
@@ -90,6 +134,10 @@ const Home = () => {
                     population={population}
                     region={region}
                     capital={capital?.[0] || "N/A"}
+                    subRegion={subregion ?? "N/A"}
+                    tld={tld ?? []}
+                    currencies={parseCurrencies(currencies)}
+                    languages={parseLanguages(languages)}
                   />
                 ),
               )}

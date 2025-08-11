@@ -1,25 +1,39 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
+export interface Country {
+  name: string;
+  population: number;
+  region: string;
+  capital: string;
+  flag: string;
+  tld?: string;
+  subRegion?: string;
+}
+
 export interface CountryState {
   countries: any;
-  countryDetailsName: string;
+  countryName: string;
   countryDetailsPopulation?: number;
   countryDetailsRegion?: string;
   countryDetailsCapital?: string;
   countryDetailsFlag?: string;
   countryDetailsSubRegion?: string;
   countryDetailsTld?: string;
+  countryDetailsCurrencies?: string;
+  countryDetailsLanguages?: string;
 }
 
 const initialState: CountryState = {
   countries: [],
-  countryDetailsName: "",
+  countryName: "",
   countryDetailsPopulation: 0,
   countryDetailsRegion: "",
   countryDetailsCapital: "",
   countryDetailsFlag: "",
   countryDetailsSubRegion: "",
   countryDetailsTld: "",
+  countryDetailsCurrencies: "",
+  countryDetailsLanguages: "",
 };
 
 export const countryDetailsSlice = createSlice({
@@ -29,29 +43,30 @@ export const countryDetailsSlice = createSlice({
     fetchCountries(state, action: PayloadAction<any>) {
       state.countries = action.payload;
     },
+    countryDetails(state, action) {
+      const {
+        countryName,
+        population,
+        region,
+        capital,
+        flag,
+        tld,
+        subregion,
+        currencies,
+        languages,
+      } = action.payload;
 
-    countryDetails(
-      state,
-      action: PayloadAction<{
-        countryName: string;
-        population: number;
-        region: string;
-        capital: string;
-        flag: string;
-        tld?: string;
-        subRegion?: string;
-      }>,
-    ) {
-      const { countryName, population, region, capital, flag, tld, subRegion } =
-        action.payload;
-
-      state.countryDetailsName = countryName;
+      state.countryName = countryName;
       state.countryDetailsPopulation = population;
       state.countryDetailsRegion = region;
       state.countryDetailsCapital = capital;
       state.countryDetailsFlag = flag;
-      state.countryDetailsTld = tld ?? "";
-      state.countryDetailsSubRegion = subRegion ?? "";
+      state.countryDetailsTld = Array.isArray(tld)
+        ? tld.join(", ")
+        : (tld ?? "");
+      state.countryDetailsSubRegion = subregion ?? "";
+      state.countryDetailsCurrencies = currencies ?? "";
+      state.countryDetailsLanguages = languages ?? "";
     },
   },
 });

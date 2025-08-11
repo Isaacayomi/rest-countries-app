@@ -23,6 +23,8 @@ type FlagProps = {
   region: string;
   capital: string;
   flag: string;
+  currencies?: string;
+  languages?: string;
 };
 
 const CountryDetails = ({
@@ -31,6 +33,8 @@ const CountryDetails = ({
   population,
   region,
   capital,
+  currencies,
+  languages,
 }: FlagProps) => {
   const {
     countryDetailsName,
@@ -40,14 +44,16 @@ const CountryDetails = ({
     countryDetailsFlag,
     countryDetailsTld,
     countryDetailsSubRegion,
+    countryDetailsCurrencies,
+    countryDetailsLanguages,
   } = useSelector((state: any) => state.countries);
   const { light } = useSelector((state: any) => state.theme);
 
   return (
-    <div className="mx-auto mt-[4rem] h-[17.24525rem] px-4">
+    <div className="mx-auto mt-[4rem] px-4">
       <img
         src={countryDetailsFlag}
-        className="h-full w-full"
+        className="h-[17.24525rem] w-full"
         alt="country flag"
       />
 
@@ -61,7 +67,7 @@ const CountryDetails = ({
           <SubHeading>Native Name:</SubHeading> België
         </p>
         <p>
-          <SubHeading>Population:</SubHeading> 11,319,511
+          <SubHeading>Population:</SubHeading> {countryDetailsPopulation}
         </p>
         <p>
           {" "}
@@ -77,23 +83,17 @@ const CountryDetails = ({
 
       <div className="mb-[2.12rem] pt-[1rem] leading-[2rem]">
         <p>
-          <SubHeading>Top Level Domain:</SubHeading> België
+          <SubHeading>Top Level Domain:</SubHeading>
+          {countryDetailsTld}
         </p>
         <p>
-          <SubHeading>Currencies:</SubHeading> 11,319,511
+          <SubHeading>Currencies:</SubHeading> {countryDetailsCurrencies}
         </p>
         <p>
           {" "}
-          <SubHeading>Languages:</SubHeading> Dutch, French, German
+          <SubHeading>Languages:</SubHeading> {countryDetailsLanguages}
         </p>
       </div>
-      {/* <CountryCard
-        flag={countryDetailsFlag}
-        countryName={countryDetailsName}
-        population={countryDetailsPopulation}
-        region={countryDetailsRegion}
-        capital={countryDetailsCapital}
-      /> */}
     </div>
   );
 };
