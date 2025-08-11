@@ -110,9 +110,11 @@ Please ensure your code adheres to the project's existing style and quality stan
 
 **Isaac Ayomide**
 
-- **GitHub**: [https://github.com/Isaacayomi](https://github.com/Isaacayomi)
-- **LinkedIn**: [Your LinkedIn Profile](https://linkedin.com/in/your_username)
-- **Twitter**: [Your Twitter Handle](https://twitter.com/your_username)
+- **GitHub**: (https://github.com/Isaacayomi)
+- **LinkedIn**: (twitter.com/_devPRIME)
+- **Twitter**: (www.linkedin.com/in/isaac-ayomide-okunlola-3568b7275)
+
+
 
 ---
 
