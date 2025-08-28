@@ -62,11 +62,21 @@ function Filter() {
         setLoading(true);
         setError(false);
 
-        const res = await fetch(`${BASE_URL}/region/${filter}`);
-        if (!res.ok) throw new Error("Country not found");
+        if (filter === "all") {
+          // ✅ Reset: show all countries
+          const res = await fetch(`${BASE_URL}/all`);
+          if (!res.ok) throw new Error("Countries not found");
 
-        const data = await res.json();
-        dispatch(setFilterCountries(data));
+          const data = await res.json();
+          dispatch(setFilterCountries(data));
+        } else {
+          // ✅ Specific region
+          const res = await fetch(`${BASE_URL}/region/${filter}`);
+          if (!res.ok) throw new Error("Countries not found");
+
+          const data = await res.json();
+          dispatch(setFilterCountries(data));
+        }
       } catch (err) {
         setError(true);
         dispatch(setFilterCountries([]));
@@ -96,36 +106,17 @@ function Filter() {
           >
             Filter by region
           </Option>
-          <Option
-            value="africa"
-            className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
-          >
-            Africa
-          </Option>
-          <Option
-            value="america"
-            className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
-          >
-            America
-          </Option>
-          <Option
-            value="europe"
-            className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
-          >
-            Europe
-          </Option>
-          <Option
-            value="asia"
-            className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
-          >
-            Asia
-          </Option>
-          <Option
-            value="oceania"
-            className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
-          >
-            Oceania
-          </Option>
+          {["all", "africa", "america", "europe", "asia", "oceania"].map(
+            (region) => (
+              <Option
+                key={region}
+                value={region}
+                className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
+              >
+                {region.charAt(0).toUpperCase() + region.slice(1)}
+              </Option>
+            ),
+          )}
         </SelectField>
       </StyledSelect>
     </div>

@@ -118,7 +118,7 @@ function CountryCard({
         <Flag src={flag} alt={`${countryName} flag`} />
         <CountryName>{countryName}</CountryName>
         <Population>
-          Population: <FlagDetails>{population}</FlagDetails>
+          Population: <FlagDetails>{population.toLocaleString()}</FlagDetails>
         </Population>
         <Region>
           Region: <FlagDetails>{region}</FlagDetails>

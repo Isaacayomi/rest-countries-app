@@ -67,7 +67,8 @@ const CountryDetails = () => {
               <SubHeading>Native Name:</SubHeading> {countryDetailsName}
             </p>
             <p>
-              <SubHeading>Population:</SubHeading> {countryDetailsPopulation}
+              <SubHeading>Population:</SubHeading>{" "}
+              {countryDetailsPopulation.toLocaleString()}
             </p>
             <p>
               <SubHeading>Region:</SubHeading> {countryDetailsRegion}
