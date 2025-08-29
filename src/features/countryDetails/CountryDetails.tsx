@@ -156,14 +156,13 @@ const CountryDetails = () => {
 
           {borderCountries.length > 0 ? (
             borderCountries.map((border) => (
-              <span
+              <button
                 key={border}
+                onClick={() => handleBorderClick(border)}
                 className="border border-[#979797] px-[1.69rem] pb-[0.31rem]"
               >
-                <button onClick={() => handleBorderClick(border)}>
-                  {border}
-                </button>
-              </span>
+                <span>{border}</span>
+              </button>
             ))
           ) : (
             <span>None</span>
