@@ -6,7 +6,9 @@ import Search from "../features/search/Search";
 import Filter from "../features/Filter/Filter";
 import LIGHT_ARROW from "../assets/images/light-arrow-back.png";
 import DARK_ARROW from "../assets/images/dark-arrow-black.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { resetCountryDetails } from "../features/countryDetails/countryDetailsSlice";
+import { resetSearch } from "../features/search/searchSlice";
 
 const StyledApp = styled.div`
   display: flex;
@@ -33,6 +35,7 @@ const Applayout = () => {
   const { light } = useSelector((state: any) => state.theme);
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -51,7 +54,11 @@ const Applayout = () => {
           ) : (
             <button
               className={`absolute top-20 m-4 ${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
-              onClick={() => navigate(-1)}
+              onClick={() => {
+                navigate("/");
+                dispatch(resetSearch());
+                dispatch(resetCountryDetails());
+              }}
             >
               <span className="flex flex-row-reverse items-center gap-[0.5rem] px-[1.5rem] py-[0.44rem]">
                 <p>Back</p>

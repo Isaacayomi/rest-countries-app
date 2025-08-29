@@ -32,6 +32,7 @@ const Home = () => {
         setLoading(true);
         const res = await fetch(ALL_COUNTRIES_URL);
         const data = await res.json();
+        // This will now set both countries and allCountries in the updated slice
         dispatch(fetchCountries(data));
       } catch (error) {
         console.log(error);

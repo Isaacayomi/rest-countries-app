@@ -11,7 +11,8 @@ export interface Country {
 }
 
 export interface CountryState {
-  countries: any;
+  countries: any; // This will be your filtered/displayed countries
+  allCountries: any; // This will store ALL countries for border lookups
   countryName: string;
   countryDetailsName?: string;
   countryDetailsPopulation?: number;
@@ -27,6 +28,7 @@ export interface CountryState {
 
 const initialState: CountryState = {
   countries: [],
+  allCountries: [], // Store all countries here for border lookups
   countryName: "",
   countryDetailsName: "",
   countryDetailsPopulation: 0,
@@ -45,6 +47,21 @@ export const countryDetailsSlice = createSlice({
   initialState,
   reducers: {
     fetchCountries(state, action: PayloadAction<any>) {
+      state.countries = action.payload;
+      // If this is the initial load of all countries, also store in allCountries
+      if (
+        !state.allCountries.length ||
+        action.payload.length > state.allCountries.length
+      ) {
+        state.allCountries = action.payload;
+      }
+    },
+    setAllCountries(state, action: PayloadAction<any>) {
+      // New action to explicitly set all countries
+      state.allCountries = action.payload;
+    },
+    filterCountries(state, action: PayloadAction<any>) {
+      // New action for search results - only updates displayed countries, not allCountries
       state.countries = action.payload;
     },
     countryDetails(state, action) {
@@ -78,16 +95,10 @@ export const countryDetailsSlice = createSlice({
       state.countryDetailsSubRegion = subregion ?? "";
       state.countryDetailsCurrencies = currencies ?? "";
       state.countryDetailsLanguages = languages ?? "";
-      if (borders && borders.length > 0 && state.countries.length > 0) {
-        state.countryDetailsBorders = borders
-          .map((code: string) => {
-            const match = state.countries.find((c: any) => c.cca3 === code);
-            return match ? match.name.common : code;
-          })
-          .filter(Boolean);
-      } else {
-        state.countryDetailsBorders = ["None"];
-      }
+
+      // Store the raw border codes array (or empty array if no borders)
+      // Let the component handle the fetching and processing
+      state.countryDetailsBorders = borders || [];
     },
 
     resetCountryDetails(state) {
@@ -106,7 +117,12 @@ export const countryDetailsSlice = createSlice({
   },
 });
 
-export const { fetchCountries, countryDetails, resetCountryDetails } =
-  countryDetailsSlice.actions;
+export const {
+  fetchCountries,
+  setAllCountries,
+  filterCountries,
+  countryDetails,
+  resetCountryDetails,
+} = countryDetailsSlice.actions;
 
 export default countryDetailsSlice.reducer;

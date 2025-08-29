@@ -1,15 +1,11 @@
 import styled from "styled-components";
 import SEARCH_ICON from "../../assets/images/search.png";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  filterSearchedCountry,
-  setSearch,
-  // filterSearchedCountry,
-} from "./searchSlice";
+import { filterSearchedCountry, setSearch } from "./searchSlice";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../constant";
 import {
-  fetchCountries,
+  filterCountries, // Changed from fetchCountries to filterCountries for search results
   resetCountryDetails,
 } from "../countryDetails/countryDetailsSlice";
 import Loader from "../../ui/Loader";
@@ -34,6 +30,7 @@ const Label = styled.label.attrs((props: any) => ({
     max-width: 30rem;
   }
 `;
+
 const Input = styled.input.attrs((props: any) => ({
   className: props.className,
 }))`
@@ -59,15 +56,18 @@ function Search() {
 
   const { light } = useSelector((state: any) => state.theme);
   const { search, searchedCountry } = useSelector((state: any) => state.search);
-  const allCountries = useSelector((state: any) => state.countries.countries);
+  const { allCountries } = useSelector((state: any) => state.countries); // Get allCountries from Redux
 
   const dispatch = useDispatch();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     dispatch(setSearch(value));
 
     if (!value.trim()) {
       dispatch(resetCountryDetails());
+      // Reset to show all countries when search is cleared
+      dispatch(filterCountries(allCountries));
     } else {
       dispatch(filterSearchedCountry(allCountries));
     }
@@ -78,8 +78,11 @@ function Search() {
       if (!search.trim()) {
         setLoading(false);
         setError(false);
+        // Show all countries when search is empty
+        dispatch(filterCountries(allCountries));
         return;
       }
+
       try {
         setLoading(true);
         setError(false);
@@ -89,22 +92,30 @@ function Search() {
         }
 
         const data = await res.json();
-        dispatch(fetchCountries(data));
+        // FIXED: Use filterCountries instead of fetchCountries
+        // This preserves the allCountries array while showing search results
+        dispatch(filterCountries(data));
         setError(false);
       } catch (err) {
         setError(true);
+        // On error, show all countries
+        dispatch(filterCountries(allCountries));
       } finally {
         setLoading(false);
       }
     }
 
     getSearchedCountry();
-  }, [search, dispatch]);
+  }, [search, dispatch, allCountries]);
 
   return (
     <>
       <Label
-        className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
+        className={`${
+          light === true
+            ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg"
+            : "bg-white text-[#111517] shadow-lg"
+        }`}
       >
         <SearchIcon src={SEARCH_ICON} alt="search icon" />
         <Input
@@ -114,7 +125,11 @@ function Search() {
           name="country"
           id="country"
           placeholder="Search for a country..."
-          className={`${light === true ? "dark: dark:bg-[#2B3844] dark:text-white" : "bg-white text-[#111517]"}`}
+          className={`${
+            light === true
+              ? "dark: dark:bg-[#2B3844] dark:text-white"
+              : "bg-white text-[#111517]"
+          }`}
         />
       </Label>
       {loading && <Loader />}
@@ -122,4 +137,5 @@ function Search() {
     </>
   );
 }
+
 export default Search;

@@ -1,5 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 type SearchProps = {
   search: string;
@@ -24,8 +23,13 @@ const searchSlice = createSlice({
         country.name.common.toLowerCase().includes(searchTerm),
       );
     },
+    resetSearch(state) {
+      state.search = "";
+      state.searchedCountry = [];
+    },
   },
 });
 
-export const { setSearch, filterSearchedCountry } = searchSlice.actions;
+export const { setSearch, filterSearchedCountry, resetSearch } =
+  searchSlice.actions;
 export default searchSlice.reducer;
