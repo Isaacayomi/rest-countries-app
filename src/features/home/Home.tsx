@@ -218,18 +218,20 @@ const Home = () => {
             subregion,
             currencies,
             languages,
+            borders,
           }: any) => (
             <CountryCard
               key={id || name.common}
               flag={flags?.png}
               countryName={name.common}
-              population={population.toLocaleString()}
+              population={population}
               region={region}
               capital={capital?.[0] || "N/A"}
               subRegion={subregion ?? "N/A"}
               tld={tld ?? []}
               currencies={parseCurrencies(currencies)}
               languages={parseLanguages(languages)}
+              borders={borders}
             />
           ),
         )}

@@ -22,6 +22,7 @@ export interface CountryState {
   countryDetailsTld?: string;
   countryDetailsCurrencies?: string;
   countryDetailsLanguages?: string;
+  countryDetailsBorders: string[];
 }
 
 const initialState: CountryState = {
@@ -36,6 +37,7 @@ const initialState: CountryState = {
   countryDetailsTld: "",
   countryDetailsCurrencies: "",
   countryDetailsLanguages: "",
+  countryDetailsBorders: [],
 };
 
 export const countryDetailsSlice = createSlice({
@@ -57,6 +59,7 @@ export const countryDetailsSlice = createSlice({
         subregion,
         currencies,
         languages,
+        borders,
       } = action.payload;
 
       const nativeName = nativeNameObj
@@ -75,6 +78,16 @@ export const countryDetailsSlice = createSlice({
       state.countryDetailsSubRegion = subregion ?? "";
       state.countryDetailsCurrencies = currencies ?? "";
       state.countryDetailsLanguages = languages ?? "";
+      if (borders && borders.length > 0 && state.countries.length > 0) {
+        state.countryDetailsBorders = borders
+          .map((code: string) => {
+            const match = state.countries.find((c: any) => c.cca3 === code);
+            return match ? match.name.common : code;
+          })
+          .filter(Boolean);
+      } else {
+        state.countryDetailsBorders = ["None"];
+      }
     },
   },
 });

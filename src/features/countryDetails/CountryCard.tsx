@@ -1,9 +1,7 @@
 import styled from "styled-components";
 import { Link, useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import CountryDetails from "./CountryDetails";
 import { countryDetails } from "./countryDetailsSlice";
-import type { ReactElement } from "react";
 
 type FlagProps = {
   countryName: string;
@@ -16,6 +14,7 @@ type FlagProps = {
   tld?: string[];
   currencies?: any;
   languages?: any;
+  borders?: string[];
 };
 
 const StyledContainer = styled.div.attrs((props: any) => ({
@@ -23,10 +22,8 @@ const StyledContainer = styled.div.attrs((props: any) => ({
 }))`
   max-width: 23.4375rem;
   width: 100%;
-  /* max-width: 16.6875rem; */
   margin-inline: auto;
   border-radius: 0.3125rem;
-  /* background: #fff; */
   box-shadow: 0 0 7px 2px rgba(0, 0, 0, 0.03);
   padding-bottom: 2.88rem;
   text-decoration: none;
@@ -41,11 +38,10 @@ const Flag = styled.img`
 const CountryName = styled.h3`
   padding-bottom: 1rem;
   padding-left: 1.5rem;
-  /* color: #111517; */
   font-size: 1.125rem;
   font-style: normal;
   font-weight: 800;
-  line-height: 1.625rem; /* 144.444% */
+  line-height: 1.625rem;
 `;
 const Population = styled.p`
   padding-bottom: 0.5rem;
@@ -85,6 +81,7 @@ function CountryCard({
   subRegion,
   currencies,
   languages,
+  borders,
 }: FlagProps) {
   const { light } = useSelector((state: any) => state.theme);
   const dispatch = useDispatch();
@@ -107,6 +104,7 @@ function CountryCard({
                 subregion: subRegion,
                 currencies,
                 languages,
+                borders,
               }),
             )
       }

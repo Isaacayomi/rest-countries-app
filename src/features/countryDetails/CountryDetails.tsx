@@ -1,39 +1,27 @@
-import { useSelector } from "react-redux";
-import CountryCard from "./CountryCard";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import { countryDetails } from "./countryDetailsSlice";
+// import { countryDetails } from "../redux/countryDetailsSlice";
 
-const CountryHeading = styled.h4.attrs((props: any) => ({
-  className: props.className,
-}))`
+const CountryHeading = styled.h4`
   font-size: 1.375rem;
   font-style: normal;
   font-weight: 800;
   line-height: normal;
 `;
 
-const SubHeading = styled.span.attrs((props: any) => ({
-  className: props.className,
-}))`
+const SubHeading = styled.span`
   font-weight: bolder;
   @media screen and (min-width: 1024px) {
     font-size: 1rem;
   }
 `;
 
-type FlagProps = {
-  countryName: string;
-  population: number;
-  region: string;
-  capital: string;
-  flag: string;
-  currencies?: string;
-  languages?: string;
-};
-
 const CountryDetails = () => {
   const {
-    countryName, // official name from state
-    countryDetailsName, // native name
+    countryName,
+    countryDetailsName,
     countryDetailsPopulation,
     countryDetailsRegion,
     countryDetailsCapital,
@@ -42,17 +30,83 @@ const CountryDetails = () => {
     countryDetailsSubRegion,
     countryDetailsCurrencies,
     countryDetailsLanguages,
+    countryDetailsBorders,
   } = useSelector((state: any) => state.countries);
 
   const { light } = useSelector((state: any) => state.theme);
+  const dispatch = useDispatch();
+
+  const [borderCountries, setBorderCountries] = useState<string[]>([]);
+
+  // fetch names of border countries
+  useEffect(() => {
+    if (!countryDetailsBorders || countryDetailsBorders.length === 0) {
+      setBorderCountries([]);
+      return;
+    }
+
+    async function fetchBorders() {
+      try {
+        const res = await fetch(
+          `https://restcountries.com/v3.1/alpha?codes=${countryDetailsBorders.join(",")}`,
+        );
+        const data = await res.json();
+        setBorderCountries(data.map((c: any) => c.name.common));
+      } catch (err) {
+        console.error("Error fetching border countries", err);
+        setBorderCountries([]);
+      }
+    }
+
+    fetchBorders();
+  }, [countryDetailsBorders]);
+
+  // handle click on a border
+  async function handleBorderClick(borderName: string) {
+    try {
+      const res = await fetch(
+        `https://restcountries.com/v3.1/name/${borderName}?fullText=true`,
+      );
+      const [data] = await res.json();
+
+      const payload = {
+        countryName: data.name.common,
+        nativeNameObj: data.name.nativeName,
+        population: data.population,
+        region: data.region,
+        capital: data.capital?.[0] || "N/A",
+        flag: data.flags?.png,
+        tld: data.tld,
+        subregion: data.subregion,
+        currencies: data.currencies
+          ? Object.values(data.currencies)
+              .map((c: any) => c.name)
+              .join(", ")
+          : "N/A",
+        languages: data.languages
+          ? Object.values(data.languages).join(", ")
+          : "N/A",
+        borders: data.borders || [],
+      };
+
+      dispatch(countryDetails(payload));
+    } catch (err) {
+      console.error("Error fetching border details", err);
+    }
+  }
 
   return (
-    <div className="mx-auto mt-[4rem] overflow-hidden px-4 lg:flex lg:items-center lg:gap-[5.02rem] lg:text-[1rem]">
-      <img
-        src={countryDetailsFlag}
-        className="h-[17.24525rem] w-full lg:w-[45%]"
-        alt="country flag"
-      />
+    <div className="mx-auto mt-[4rem] overflow-hidden px-4 lg:grid lg:grid-cols-2 lg:gap-[5.02rem] lg:text-[1rem]">
+      {/* Flag */}
+      <div className="flex justify-start">
+        <img
+          src={countryDetailsFlag}
+          className="h-[17.24525rem] w-full object-cover lg:w-[90%]"
+          alt="country flag"
+        />
+      </div>
+
+      {/* Right side content */}
       <div>
         <CountryHeading
           className={`pt-[2.75rem] ${
@@ -61,7 +115,9 @@ const CountryDetails = () => {
         >
           {countryName}
         </CountryHeading>
-        <div className="lg:flex lg:items-center lg:gap-[7.31rem]">
+
+        {/* Info sections */}
+        <div className="lg:flex lg:items-start lg:gap-[7.31rem]">
           <div className="mb-[2rem] pt-[1rem] text-[0.875rem] leading-[2rem]">
             <p>
               <SubHeading>Native Name:</SubHeading> {countryDetailsName}
@@ -83,8 +139,7 @@ const CountryDetails = () => {
 
           <div className="mb-[2.12rem] pt-[1rem] leading-[2rem]">
             <p>
-              <SubHeading>Top Level Domain:</SubHeading>
-              {countryDetailsTld}
+              <SubHeading>Top Level Domain:</SubHeading> {countryDetailsTld}
             </p>
             <p>
               <SubHeading>Currencies:</SubHeading> {countryDetailsCurrencies}
@@ -93,6 +148,26 @@ const CountryDetails = () => {
               <SubHeading>Languages:</SubHeading> {countryDetailsLanguages}
             </p>
           </div>
+        </div>
+
+        {/* Border Countries */}
+        <div className="flex flex-wrap items-center gap-[0.62rem] pb-4">
+          <span className="mr-2 font-semibold">Border countries:</span>
+
+          {borderCountries.length > 0 ? (
+            borderCountries.map((border) => (
+              <span
+                key={border}
+                className="border border-[#979797] px-[1.69rem] pb-[0.31rem]"
+              >
+                <button onClick={() => handleBorderClick(border)}>
+                  {border}
+                </button>
+              </span>
+            ))
+          ) : (
+            <span>None</span>
+          )}
         </div>
       </div>
     </div>
