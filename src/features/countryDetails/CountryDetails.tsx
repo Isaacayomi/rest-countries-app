@@ -40,8 +40,8 @@ const CountryDetails = () => {
 
   // fetch names of border countries
   useEffect(() => {
+    setBorderCountries([]);
     if (!countryDetailsBorders || countryDetailsBorders.length === 0) {
-      setBorderCountries([]);
       return;
     }
 
