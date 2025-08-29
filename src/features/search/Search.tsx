@@ -8,7 +8,10 @@ import {
 } from "./searchSlice";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../constant";
-import { fetchCountries } from "../countryDetails/countryDetailsSlice";
+import {
+  fetchCountries,
+  resetCountryDetails,
+} from "../countryDetails/countryDetailsSlice";
 import Loader from "../../ui/Loader";
 import ErrorComponent from "../../ui/ErrorComponent";
 
@@ -60,8 +63,14 @@ function Search() {
 
   const dispatch = useDispatch();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearch(e.target.value));
-    dispatch(filterSearchedCountry(allCountries));
+    const value = e.target.value;
+    dispatch(setSearch(value));
+
+    if (!value.trim()) {
+      dispatch(resetCountryDetails());
+    } else {
+      dispatch(filterSearchedCountry(allCountries));
+    }
   };
 
   useEffect(() => {

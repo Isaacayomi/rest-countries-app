@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { setFilter, setFilterCountries } from "./filterSlice";
 import { useEffect, useState } from "react";
-import { BASE_URL } from "../../constant";
+import { ALL_COUNTRIES_URL, BASE_URL } from "../../constant";
 
 const StyledSelect = styled.div.attrs((props: any) => ({
   className: props.className,
@@ -63,8 +63,7 @@ function Filter() {
         setError(false);
 
         if (filter === "all") {
-          // ✅ Reset: show all countries
-          const res = await fetch(`${BASE_URL}/all`);
+          const res = await fetch(`${ALL_COUNTRIES_URL}`);
           if (!res.ok) throw new Error("Countries not found");
 
           const data = await res.json();

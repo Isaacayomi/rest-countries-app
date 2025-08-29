@@ -89,9 +89,24 @@ export const countryDetailsSlice = createSlice({
         state.countryDetailsBorders = ["None"];
       }
     },
+
+    resetCountryDetails(state) {
+      state.countryName = "";
+      state.countryDetailsName = "";
+      state.countryDetailsPopulation = 0;
+      state.countryDetailsRegion = "";
+      state.countryDetailsCapital = "";
+      state.countryDetailsFlag = "";
+      state.countryDetailsSubRegion = "";
+      state.countryDetailsTld = "";
+      state.countryDetailsCurrencies = "";
+      state.countryDetailsLanguages = "";
+      state.countryDetailsBorders = [];
+    },
   },
 });
 
-export const { fetchCountries, countryDetails } = countryDetailsSlice.actions;
+export const { fetchCountries, countryDetails, resetCountryDetails } =
+  countryDetailsSlice.actions;
 
 export default countryDetailsSlice.reducer;
