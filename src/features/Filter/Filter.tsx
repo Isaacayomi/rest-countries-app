@@ -69,7 +69,7 @@ function Filter() {
           const data = await res.json();
           dispatch(setFilterCountries(data));
         } else {
-          // ✅ Specific region
+          // Specific region
           const res = await fetch(`${BASE_URL}/region/${filter}`);
           if (!res.ok) throw new Error("Countries not found");
 
