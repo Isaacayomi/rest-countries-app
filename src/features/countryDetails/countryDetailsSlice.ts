@@ -46,16 +46,21 @@ export const countryDetailsSlice = createSlice({
   name: "countries",
   initialState,
   reducers: {
+    // fetchCountries(state, action: PayloadAction<any>) {
+    //   state.countries = action.payload;
+    //   // If this is the initial load of all countries, also store in allCountries
+    //   if (
+    //     !state.allCountries.length ||
+    //     action.payload.length > state.allCountries.length
+    //   ) {
+    //     state.allCountries = action.payload;
+    //   }
+    // },
     fetchCountries(state, action: PayloadAction<any>) {
       state.countries = action.payload;
-      // If this is the initial load of all countries, also store in allCountries
-      if (
-        !state.allCountries.length ||
-        action.payload.length > state.allCountries.length
-      ) {
-        state.allCountries = action.payload;
-      }
+      state.allCountries = action.payload; // always update both
     },
+
     setAllCountries(state, action: PayloadAction<any>) {
       // New action to explicitly set all countries
       state.allCountries = action.payload;
@@ -98,7 +103,17 @@ export const countryDetailsSlice = createSlice({
 
       // Store the raw border codes array (or empty array if no borders)
       // Let the component handle the fetching and processing
-      state.countryDetailsBorders = borders || [];
+      // state.countryDetailsBorders = borders || [];
+      if (borders && borders.length > 0 && state.allCountries.length > 0) {
+        state.countryDetailsBorders = borders
+          .map((code: string) => {
+            const match = state.allCountries.find((c: any) => c.cca3 === code);
+            return match ? match.name.common : code;
+          })
+          .filter(Boolean);
+      } else {
+        state.countryDetailsBorders = ["None"];
+      }
     },
 
     resetCountryDetails(state) {

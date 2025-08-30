@@ -62,20 +62,12 @@ function Filter() {
         setLoading(true);
         setError(false);
 
-        if (filter === "all") {
-          const res = await fetch(`${ALL_COUNTRIES_URL}`);
-          if (!res.ok) throw new Error("Countries not found");
+        // Specific region
+        const res = await fetch(`${BASE_URL}/region/${filter}`);
+        if (!res.ok) throw new Error("Countries not found");
 
-          const data = await res.json();
-          dispatch(setFilterCountries(data));
-        } else {
-          // Specific region
-          const res = await fetch(`${BASE_URL}/region/${filter}`);
-          if (!res.ok) throw new Error("Countries not found");
-
-          const data = await res.json();
-          dispatch(setFilterCountries(data));
-        }
+        const data = await res.json();
+        dispatch(setFilterCountries(data));
       } catch (err) {
         setError(true);
         dispatch(setFilterCountries([]));
