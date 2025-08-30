@@ -37,16 +37,17 @@ const CountryDetails = () => {
   const dispatch = useDispatch();
 
   const [borderCountries, setBorderCountries] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingDetails, setLoadingDetails] = useState(false);
+  const [loadingBorders, setLoadingBorders] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // 🔹 Always fetch the latest full details for the current country
+  // 🔹 Fetch main country details
   useEffect(() => {
     if (!countryName) return;
 
     async function fetchCountryDetails() {
       try {
-        setLoading(true);
+        setLoadingDetails(true);
         const res = await fetch(
           `https://restcountries.com/v3.1/name/${countryName}?fullText=true`,
         );
@@ -78,7 +79,7 @@ const CountryDetails = () => {
       } catch (err) {
         console.error("Error fetching country details", err);
       } finally {
-        setLoading(false);
+        setLoadingDetails(false);
       }
     }
 
@@ -101,7 +102,7 @@ const CountryDetails = () => {
 
     async function fetchBorders() {
       try {
-        setLoading(true);
+        setLoadingBorders(true);
         const res = await fetch(
           `https://restcountries.com/v3.1/alpha?codes=${countryDetailsBorders.join(",")}`,
           { signal: controller.signal },
@@ -116,7 +117,7 @@ const CountryDetails = () => {
           setBorderCountries([]);
         }
       } finally {
-        setLoading(false);
+        setLoadingBorders(false);
       }
     }
 
@@ -126,7 +127,7 @@ const CountryDetails = () => {
   // 🔹 Handle when a border is clicked
   async function handleBorderClick(borderName: string) {
     try {
-      setLoading(true);
+      setLoadingDetails(true);
       const res = await fetch(
         `https://restcountries.com/v3.1/name/${borderName}?fullText=true`,
       );
@@ -158,11 +159,12 @@ const CountryDetails = () => {
     } catch (err) {
       console.error("Error fetching border details", err);
     } finally {
-      setLoading(false);
+      setLoadingDetails(false);
     }
   }
 
-  if (loading) return <Loader />;
+  // ⏳ Wait for main details
+  if (loadingDetails) return <Loader />;
 
   return (
     <div className="mx-auto mt-[4rem] overflow-hidden px-4 lg:grid lg:grid-cols-2 lg:gap-[5.02rem] lg:text-[1rem]">
@@ -223,7 +225,9 @@ const CountryDetails = () => {
         <div className="flex flex-wrap items-center gap-[0.62rem] pb-4">
           <span className="mr-2 font-semibold">Border countries:</span>
 
-          {borderCountries.length > 0 ? (
+          {loadingBorders ? (
+            <span>Loading borders...</span>
+          ) : borderCountries.length > 0 ? (
             borderCountries.map((border) => (
               <button
                 key={border}
