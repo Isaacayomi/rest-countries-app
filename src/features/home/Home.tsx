@@ -3,9 +3,13 @@ import styled from "styled-components";
 import CountryCard from "../countryDetails/CountryCard";
 import Loader from "../../ui/Loader";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCountries } from "../countryDetails/countryDetailsSlice";
+import {
+  fetchCountries,
+  resetCountryDetails,
+} from "../countryDetails/countryDetailsSlice";
 import { ALL_COUNTRIES_URL } from "../../constant";
 import { setAllCountries } from "../Filter/filterSlice";
+import { resetSearch } from "../search/searchSlice";
 
 const StyledHome = styled.div`
   @media (min-width: 1024px) {
@@ -25,6 +29,11 @@ const Home = () => {
   );
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(resetCountryDetails());
+    dispatch(resetSearch());
+  }, [dispatch]);
 
   useEffect(() => {
     async function getCountries() {

@@ -56,8 +56,8 @@ const Applayout = () => {
               className={`absolute top-20 m-4 ${light === true ? "dark: dark:bg-[#2B3844] dark:text-white dark:shadow-lg" : "bg-white text-[#111517] shadow-lg"}`}
               onClick={() => {
                 navigate("/");
-                dispatch(resetSearch());
-                dispatch(resetCountryDetails());
+                // dispatch(resetSearch());
+                // dispatch(resetCountryDetails());
               }}
             >
               <span className="flex flex-row-reverse items-center gap-[0.5rem] px-[1.5rem] py-[0.44rem]">
