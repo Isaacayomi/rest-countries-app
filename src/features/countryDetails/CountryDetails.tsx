@@ -21,16 +21,16 @@ const SubHeading = styled.span`
 const CountryDetails = () => {
   const {
     countryName,
+    countryDetailsBorders,
+    countryDetailsFlag,
     countryDetailsName,
     countryDetailsPopulation,
     countryDetailsRegion,
-    countryDetailsCapital,
-    countryDetailsFlag,
-    countryDetailsTld,
     countryDetailsSubRegion,
+    countryDetailsCapital,
+    countryDetailsTld,
     countryDetailsCurrencies,
     countryDetailsLanguages,
-    countryDetailsBorders,
   } = useSelector((state: any) => state.countries);
 
   const { light } = useSelector((state: any) => state.theme);
@@ -39,96 +39,97 @@ const CountryDetails = () => {
   const [borderCountries, setBorderCountries] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
-  const previousCountryNameRef = useRef<string>("");
-  const fetchCounterRef = useRef(0);
 
-  // Fetch borders - this effect runs whenever the country changes OR when borders array changes
+  // 🔹 Always fetch the latest full details for the current country
   useEffect(() => {
-    // If it's the same country and we're just re-selecting it, force a re-fetch
-    const currentFetchId = ++fetchCounterRef.current;
+    if (!countryName) return;
 
-    // Clean up any ongoing requests
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
+    async function fetchCountryDetails() {
+      try {
+        setLoading(true);
+        const res = await fetch(
+          `https://restcountries.com/v3.1/name/${countryName}?fullText=true`,
+        );
+        if (!res.ok) throw new Error("Failed to fetch country details");
+
+        const [data] = await res.json();
+
+        const payload = {
+          countryName: data.name.common,
+          nativeNameObj: data.name.nativeName,
+          population: data.population,
+          region: data.region,
+          capital: data.capital?.[0] || "N/A",
+          flag: data.flags?.png,
+          tld: data.tld,
+          subregion: data.subregion,
+          currencies: data.currencies
+            ? Object.values(data.currencies)
+                .map((c: any) => c.name)
+                .join(", ")
+            : "N/A",
+          languages: data.languages
+            ? Object.values(data.languages).join(", ")
+            : "N/A",
+          borders: data.borders || [],
+        };
+
+        dispatch(countryDetails(payload));
+      } catch (err) {
+        console.error("Error fetching country details", err);
+      } finally {
+        setLoading(false);
+      }
     }
 
+    fetchCountryDetails();
+  }, [countryName, dispatch]);
+
+  // 🔹 Fetch border countries whenever borders update
+  useEffect(() => {
     if (!countryDetailsBorders || countryDetailsBorders.length === 0) {
       setBorderCountries([]);
-      setLoading(false);
       return;
     }
 
-    setLoading(true);
-    setBorderCountries([]);
-
-    // Create new AbortController for this request
-    abortControllerRef.current = new AbortController();
-    const signal = abortControllerRef.current.signal;
-
-    async function fetchBorders() {
-      try {
-        const res = await fetch(
-          `https://restcountries.com/v3.1/alpha?codes=${countryDetailsBorders.join(",")}`,
-          { signal },
-        );
-
-        if (!res.ok) throw new Error("Failed to fetch borders");
-
-        const data = await res.json();
-
-        // Only update state if this is the most recent fetch request
-        if (currentFetchId === fetchCounterRef.current) {
-          setBorderCountries(data.map((c: any) => c.name.common));
-        }
-      } catch (err: any) {
-        if (err.name === "AbortError") {
-          console.log("Fetch aborted");
-        } else {
-          console.error("Error fetching border countries", err);
-          // Only update state if this is the most recent fetch request
-          if (currentFetchId === fetchCounterRef.current) {
-            setBorderCountries([]);
-          }
-        }
-      } finally {
-        // Only update state if this is the most recent fetch request
-        if (currentFetchId === fetchCounterRef.current) {
-          setLoading(false);
-        }
-      }
-    }
-
-    fetchBorders();
-
-    // Update the previous country name
-    previousCountryNameRef.current = countryName;
-
-    // Cleanup function to abort fetch if component unmounts or dependencies change
-    return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-    };
-  }, [countryDetailsBorders, countryName]); // This will run every time countryName changes
-
-  async function handleBorderClick(borderName: string) {
-    setLoading(true);
-
-    // Abort any ongoing requests
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
 
     const controller = new AbortController();
     abortControllerRef.current = controller;
-    const signal = controller.signal;
 
+    async function fetchBorders() {
+      try {
+        setLoading(true);
+        const res = await fetch(
+          `https://restcountries.com/v3.1/alpha?codes=${countryDetailsBorders.join(",")}`,
+          { signal: controller.signal },
+        );
+        if (!res.ok) throw new Error("Failed to fetch borders");
+
+        const data = await res.json();
+        setBorderCountries(data.map((c: any) => c.name.common));
+      } catch (err: any) {
+        if (err.name !== "AbortError") {
+          console.error("Error fetching border countries", err);
+          setBorderCountries([]);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchBorders();
+  }, [countryDetailsBorders]);
+
+  // 🔹 Handle when a border is clicked
+  async function handleBorderClick(borderName: string) {
     try {
+      setLoading(true);
       const res = await fetch(
         `https://restcountries.com/v3.1/name/${borderName}?fullText=true`,
-        { signal },
       );
-
       if (!res.ok) throw new Error("Failed to fetch border details");
 
       const [data] = await res.json();
@@ -154,19 +155,14 @@ const CountryDetails = () => {
       };
 
       dispatch(countryDetails(payload));
-    } catch (err: any) {
-      if (err.name !== "AbortError") {
-        console.error("Error fetching border details", err);
-        setBorderCountries([]);
-      }
+    } catch (err) {
+      console.error("Error fetching border details", err);
     } finally {
       setLoading(false);
     }
   }
 
-  if (loading) {
-    return <Loader />;
-  }
+  if (loading) return <Loader />;
 
   return (
     <div className="mx-auto mt-[4rem] overflow-hidden px-4 lg:grid lg:grid-cols-2 lg:gap-[5.02rem] lg:text-[1rem]">
@@ -238,11 +234,7 @@ const CountryDetails = () => {
               </button>
             ))
           ) : (
-            <span>
-              {countryDetailsBorders?.length > 0 && loading
-                ? "Loading..."
-                : "None"}
-            </span>
+            <span>None</span>
           )}
         </div>
       </div>
