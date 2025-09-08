@@ -27,7 +27,6 @@ const StyledContainer = styled.div.attrs((props: any) => ({
   box-shadow: 0 0 7px 2px rgba(0, 0, 0, 0.03);
   padding-bottom: 2.88rem;
   text-decoration: none;
-  margin-bottom: 2.5rem;
 `;
 
 const Flag = styled.img`
